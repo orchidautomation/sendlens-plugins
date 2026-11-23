@@ -1,0 +1,16 @@
+{
+  "name": "sendlens",
+  "description": "The SendLens plugin for Claude Code",
+  "owner": {
+    "name": "Orchid Automation",
+    "url": "https://sendlens.app"
+  },
+  "plugins": [
+    {
+      "name": "sendlens",
+      "source": "./plugins/sendlens",
+      "description": "The SendLens MCP server and its skills",
+      "homepage": "https://sendlens.app"
+    }
+  ]
+}

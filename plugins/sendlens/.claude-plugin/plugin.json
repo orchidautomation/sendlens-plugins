@@ -1,0 +1,18 @@
+{
+  "name": "sendlens",
+  "version": "0.1.0",
+  "description": "Read an agency's cold outbound across Instantly, Smartlead, HeyReach and EmailBison through the SendLens MCP server, with skills for client reviews, reply triage, campaign health and onboarding. Read-only toward vendors.",
+  "author": {
+    "name": "Orchid Automation"
+  },
+  "homepage": "https://sendlens.app",
+  "keywords": [
+    "sendlens",
+    "cold-outbound",
+    "instantly",
+    "smartlead",
+    "heyreach",
+    "emailbison",
+    "mcp"
+  ]
+}

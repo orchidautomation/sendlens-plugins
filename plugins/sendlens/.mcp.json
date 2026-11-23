@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sendlens": {
+      "type": "http",
+      "url": "${SENDLENS_MCP_URL:-https://api.sendlens.app/mcp}"
+    }
+  }
+}
