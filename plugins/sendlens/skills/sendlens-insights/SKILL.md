@@ -1,13 +1,30 @@
 ---
 name: sendlens-insights
-description: Use when someone asks a diagnostic question about cold outbound that a list of replies or metrics doesn't answer, such as why a campaign underperforms, which variant or step wins, when prospects reply, which leads are hot, which replies were dropped, whether leads collide across campaigns, or how this period compares with the last.
+description: Use when someone asks what's going on across clients and campaigns, or a diagnostic question about cold outbound that a list of replies or metrics doesn't answer, such as which campaigns moved, where bounces and negative replies pile up, why a campaign underperforms, which variant or step wins, when prospects reply, which leads are hot, which replies were dropped, whether leads collide across campaigns, or how this period compares with the last.
 ---
 
-# Insights on stored history
+# Named queries and insights on stored history
 
 SendLens runs every outbound-sdk insight on the history it stored for every tool and client you can see. Nothing is fetched from a vendor, so an insight costs no vendor requests and answers across Instantly, Smartlead, HeyReach and EmailBison at once. Every number follows [sendlens-honesty-labels](../sendlens-honesty-labels/SKILL.md).
 
 SendLens is read-only toward vendors. Nothing here sends, pauses, edits or deletes anything in Instantly, Smartlead, HeyReach or EmailBison. An insight can suggest a change; a person makes it in the vendor tool.
+
+## Start with a named query
+
+For "what's going on", start here rather than writing SQL. A named query is a saved question SendLens runs on the agency's warehouse: aggregates only, campaigns by name, reused until the next warehouse load, so asking again costs nothing.
+
+1. Call `queries` to list them. Each has its `question`, its `parameters` as JSON Schema, its `grain` (what one row is), `evidence`, `privacy`, `cost` and the `forbiddenAdaptations`: readings the answer does not support. Respect those.
+2. Call `run_query` with `name`, `params` and, to narrow it, `clientId`:
+   - `agency_overview`: every campaign across clients, by name, with status and tags, this window against the one before.
+   - `recent_movers`: the campaigns whose sends, replies, positives, reply rate or bounce rate moved most. Pass `metric`.
+   - `risk_hotspots`: where bounces, unsubscribes and negative, wrong-person and left-company replies pile up, worst first.
+   - `reply_mix`: how replies split across labels `by` step, variant, week or label.
+   - `lead_field_signals`: which lead custom field values go with replies and positives, against a baseline.
+   - `company_domain_signals`: which company email domains reply well or badly.
+3. Read each row's `evidence`, `complete` and `stale` as well as `meta`. A null count is unknown, never 0. If `data.truncated` is true, raise `limit` in `params` or narrow the query. If it answers `query_params_invalid`, fix the params from `errors` and run it again.
+4. The lead and domain queries only return groups of at least `minCell` leads (5 or more). Never lower it to single out a lead or a company's people.
+
+Then dig into one campaign with an insight.
 
 ## Steps
 
@@ -39,4 +56,6 @@ SendLens is read-only toward vendors. Nothing here sends, pauses, edits or delet
 - `insight_cap_reached`: raise `maxRequests` only if the person agrees the answer is worth it.
 - `admin_required`: only an agency admin can do this. Stop and tell the person to ask an admin. Don't retry.
 - `view_not_in_scope`: the server URL this connection uses doesn't include the insights view. Tell the person they can connect again with a URL that includes it.
+- `query_params_invalid`: fix the params from the query's `parameters` in `queries` and try once more.
+- `warehouse_not_loaded`: the warehouse hasn't loaded since the last change; wait for the time in the answer and try again.
 - `client_not_in_scope`: the connection can't see that client. Call `clients` and pick one it can see, or ask the person to connect with a broader URL.

@@ -17,8 +17,9 @@ SendLens is read-only toward vendors. Nothing here sends, pauses, edits or delet
 4. Call `mailbox_health` for the client. List mailboxes with `status` `at_risk` or `watch`.
 5. Call `runway` for the client. Flag campaigns with fewer than 14 `runwayDays`, and campaigns where runway is null.
 6. Call `unanswered` for the client with `order` `oldest`, so the longest wait comes first. Page with `cursor` until `nextCursor` is null, count positive replies still waiting from their labels, and give the oldest wait. The snippets are enough for counting; don`t fetch whole replies.
-7. Call `run_insight` with `name` `period_comparison` for this week against the last, and `campaign_ranking` for the best and worst campaigns, each with `clientId`. Use their intervals: a change inside the interval is noise. See [sendlens-insights](../sendlens-insights/SKILL.md).
-8. Write the summary.
+7. Call `run_query` with `name` `agency_overview` and `clientId` for every campaign by name against the week before, and `risk_hotspots` for where bounces and negative replies concentrate. Use the campaign names in the summary.
+8. Call `run_insight` with `name` `period_comparison` for this week against the last, and `campaign_ranking` for the best and worst campaigns, each with `clientId`. Use their intervals: a change inside the interval is noise. See [sendlens-insights](../sendlens-insights/SKILL.md).
+9. Write the summary.
 
 ## The summary
 

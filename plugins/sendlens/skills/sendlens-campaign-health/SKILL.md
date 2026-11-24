@@ -9,6 +9,8 @@ Check bounce and reply rates, mailbox health and lead runway. Every number follo
 
 SendLens is read-only toward vendors. Nothing here sends, pauses, edits or deletes anything in Instantly, Smartlead, HeyReach or EmailBison. You can point out a problem and suggest a fix. A person makes the change in the vendor tool.
 
+For an agency-wide "what's going on", call `run_query` with `name` `agency_overview` first, then `risk_hotspots` for where bounces and unsubscribes pile up and `recent_movers` for what changed. Call `queries` for their parameters; [sendlens-insights](../sendlens-insights/SKILL.md) has the full list. Then follow the steps for the campaigns and mailboxes they point at.
+
 ## Steps
 
 1. Call `mailbox_health` with `clientId` and `days` (7 is a good start). Each mailbox has `bounceRate`, `replyRate` and `status`:
