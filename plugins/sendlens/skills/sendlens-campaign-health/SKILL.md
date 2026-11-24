@@ -16,7 +16,7 @@ SendLens is read-only toward vendors. Nothing here sends, pauses, edits or delet
    - `watch`: bounce rate 2% or more.
    - `healthy`: below that.
    - null: the vendor did not report sent or bounced counts, so there is no call. Say so. Don't mark it healthy.
-2. Call `daily_metrics` with `clientId`, `from` and `to` to see when a rate changed.
+2. Call `daily_metrics` with `clientId`, `from` and `to` to see when a rate changed. It is latest day first, 20 rows a page; page with `cursor` and the same `order`, or pass `order` `oldest` to read forward in time.
 3. Call `runway` with `clientId`. `runwayDays` is the leads left divided by the daily pace. It is null when the pace is 0 or unknown.
 4. For a campaign that looks wrong, call `run_insight` with `name` `campaign_diagnosis` and the campaign in `input`, and `anomalies` for the days that moved. `bounce_watch`, `sender_capacity` and `warmup_readiness` check sending across campaigns. They run on stored history with no vendor request; see [sendlens-insights](../sendlens-insights/SKILL.md).
 5. For a question these tools don't answer, call `sql_catalog` first to see the tables and columns you may read. Then call `query_sql` with one `SELECT`. Tables are written `sendlens.<table>`. Keep the `evidence`, `complete` and `stale` columns in your query and in your answer.
